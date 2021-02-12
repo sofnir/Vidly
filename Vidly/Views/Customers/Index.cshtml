@@ -17,9 +17,9 @@ else
         <tbody>
             @foreach (var customer in Model)
             {
-                <tr>
-                    <td>@Html.ActionLink(customer.Name, "Details", "Customers", new { id = customer.Id }, null)</td>
-                </tr>            
+            <tr>
+                <a asp-controller="Customers" asp-action="Details" asp-route-id="@customer.Id">@customer.Name</a>                
+            </tr>            
             }
         </tbody>
     </table>

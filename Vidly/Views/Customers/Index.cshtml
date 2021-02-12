@@ -1,0 +1,28 @@
+﻿@model List<Customer>
+
+<h1>Customers</h1>
+
+@if (Model == null || Model.Count == 0)
+{
+    <p>We don't have any customers yet.</p>
+}
+else
+{
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th scope="col">Customers</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var customer in Model)
+            {
+                <tr>
+                    <td>
+                        <a asp-controller="Customers" asp-action="Details" asp-route-id="@customer.Id">@customer.Name</a>
+                    </td>
+                </tr>            
+            }
+        </tbody>
+    </table>
+}

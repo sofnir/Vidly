@@ -29,13 +29,15 @@ namespace Vidly.Controllers
 
         public async Task<IActionResult> Details(int id)
         {
-            var customer = await _context.Customers.Where(q => 
-                q.Id == id)?.SingleOrDefaultAsync();
+            var customer = await _context.Customers
+                .Where(c => c.Id == id)
+                ?.Include(c => c.MembershipType)
+                .SingleOrDefaultAsync();
 
             if (customer == null)
                 return NotFound();
 
-            return Content(customer.Name);
+            return View(customer);
         }
     }
 }

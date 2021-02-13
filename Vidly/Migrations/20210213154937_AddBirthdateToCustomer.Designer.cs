@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Vidly.Data;
 
 namespace Vidly.Migrations
 {
     [DbContext(typeof(VidlyContext))]
-    partial class VidlyContextModelSnapshot : ModelSnapshot
+    [Migration("20210213154937_AddBirthdateToCustomer")]
+    partial class AddBirthdateToCustomer
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -27,7 +29,7 @@ namespace Vidly.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<DateTime?>("Birthdate")
-                        .HasColumnType("Date");
+                        .HasColumnType("datetime2");
 
                     b.Property<bool>("IsSubscribedToNewsletter")
                         .HasColumnType("bit");

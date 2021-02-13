@@ -11,7 +11,8 @@ else
     <table class="table table-hover">
         <thead>
             <tr>
-                <th scope="col">Customers</th>
+                <th>Customers</th>
+                <th>Membership Type</th>
             </tr>
         </thead>
         <tbody>
@@ -19,8 +20,8 @@ else
             {
             <tr>
                 <td><a asp-controller="Customers" asp-action="Details" asp-route-id="@customer.Id">@customer.Name</a></td>
-                <td>@customer.MembershipType.DiscountRate%</td>
-            </tr>            
+                <td>@customer.MembershipType.Name</td>
+            </tr>
             }
         </tbody>
     </table>

@@ -1,28 +1,33 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Vidly.Data;
 using Vidly.Models;
 
 namespace Vidly.Controllers
 {
     public class CustomersController : Controller
     {
-        List<Customer> Customers = new List<Customer>()
-        {
-            new Customer() { Id = 1, Name = "John Smith" },
-            new Customer() { Id = 2, Name = "Mary Williams" }
-        };
+        private readonly VidlyContext _context;
 
-        public IActionResult Index()
-        {            
-            return View(Customers);
+        public CustomersController(VidlyContext context)
+        {
+            _context = context;
         }
 
-        public IActionResult Details(int id)
+        public async Task<IActionResult> Index()
         {
-            var customer = Customers?.Where(q => q.Id == id)?.FirstOrDefault();
+            var customers = await _context.Customers.ToListAsync();
+            return View(customers);
+        }
+
+        public async Task<IActionResult> Details(int id)
+        {
+            var customer = await _context.Customers.Where(q => 
+                q.Id == id)?.SingleOrDefaultAsync();
 
             if (customer == null)
                 return NotFound();

@@ -1,23 +1,27 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Vidly.Data;
 using Vidly.Models;
 
 namespace Vidly.Controllers
 {
     public class MoviesController : Controller
     {
-        List<Movie> Movies = new List<Movie>()
-        { 
-            new Movie() { Id = 1, Name = "Shrek" },
-            new Movie() { Id = 2, Name = "Wall-e" }
-        };
+        private readonly VidlyContext _context;
 
-        public IActionResult Index()
-        {            
-            return View(Movies);
+        public MoviesController(VidlyContext context)
+        {
+            _context = context;
+        }
+
+        public async Task<IActionResult> Index()
+        {
+            var movies = await _context.Movies.ToListAsync();
+            return View(movies);
         }        
     }
 }

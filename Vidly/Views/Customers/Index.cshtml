@@ -18,7 +18,9 @@ else
             @foreach (var customer in Model)
             {
             <tr>
-                <a asp-controller="Customers" asp-action="Details" asp-route-id="@customer.Id">@customer.Name</a>                
+                <td>
+                    <a asp-controller="Customers" asp-action="Details" asp-route-id="@customer.Id">@customer.Name</a>
+                </td>                
             </tr>            
             }
         </tbody>

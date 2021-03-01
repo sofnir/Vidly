@@ -11,17 +11,22 @@ else
     <table class="table table-hover">
         <thead>
             <tr>
-                <th scope="col">Customers</th>
+                <th scope="col">Name</th>
+                <th scope="col">Genre</th>
             </tr>
         </thead>
         <tbody>
             @foreach (var movie in Model)
             {
-                <tr>
-                    <td>
-                        @movie.Name
-                    </td>
-                </tr>
+            <tr>
+                <td>
+                    <a asp-controller="Movies" 
+                       asp-action="Details"
+                       asp-route-id="@movie.Id">
+                    @movie.Name</a>
+                </td>
+                <td>@movie.Genre.Name</td>
+            </tr>                
 
             }
         </tbody>

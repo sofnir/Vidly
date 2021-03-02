@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
@@ -12,6 +13,7 @@ namespace Vidly.Models
         public string Name { get; set; }
         public bool IsSubscribedToNewsletter { get; set; }
         [Column(TypeName = "Date")]
+        [Display(Name = "Date of Birthday")]
         public DateTime? Birthdate { get; set; }
         public byte MembershipTypeId { get; set; }
 

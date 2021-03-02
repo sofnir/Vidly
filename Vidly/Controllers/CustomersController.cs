@@ -39,5 +39,10 @@ namespace Vidly.Controllers
 
             return View(customer);
         }
+
+        public async Task<IActionResult> New()
+        {
+            return View();
+        }
     }
 }

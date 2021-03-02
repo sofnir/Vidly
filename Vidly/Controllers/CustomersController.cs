@@ -43,10 +43,17 @@ namespace Vidly.Controllers
 
         public async Task<IActionResult> New()
         {
-            var membershipTypes = _context.MembershipTypes.ToList();
+            var membershipTypes = await _context.MembershipTypes.ToListAsync();
             var newCustomer = new NewCustomerViewModel { MembershipTypes = membershipTypes };
 
             return View(newCustomer);
+        }
+
+        public async Task<IActionResult> Create(Customer customer)
+        {
+            await _context.Customers.AddAsync(customer);
+            await _context.SaveChangesAsync();
+            return RedirectToAction("Index", "Customers");
         }
     }
 }

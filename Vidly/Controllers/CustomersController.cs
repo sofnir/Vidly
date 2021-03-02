@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Vidly.Data;
 using Vidly.Models;
+using Vidly.ViewModels;
 
 namespace Vidly.Controllers
 {
@@ -42,7 +43,10 @@ namespace Vidly.Controllers
 
         public async Task<IActionResult> New()
         {
-            return View();
+            var membershipTypes = _context.MembershipTypes.ToList();
+            var newCustomer = new NewCustomerViewModel { MembershipTypes = membershipTypes };
+
+            return View(newCustomer);
         }
     }
 }

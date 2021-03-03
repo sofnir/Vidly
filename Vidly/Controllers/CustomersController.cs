@@ -42,31 +42,15 @@ namespace Vidly.Controllers
         }
 
         public async Task<IActionResult> Form()
-        {
+        {            
             var membershipTypes = await _context.MembershipTypes.ToListAsync();
-            var newCustomer = new CustomerFormViewModel { MembershipTypes = membershipTypes };
+            var newCustomer = new CustomerFormViewModel 
+            {
+                Customer = new Customer(),
+                MembershipTypes = membershipTypes
+            };
 
             return View(newCustomer);
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> Save(Customer customer)
-        {
-            if(customer.Id == 0)
-                await _context.Customers.AddAsync(customer);
-            else
-            {
-                var customerInDb = await _context.Customers.SingleAsync(c => c.Id == customer.Id);
-
-                customerInDb.Name = customer.Name;
-                customerInDb.Birthdate = customer.Birthdate;
-                customerInDb.MembershipTypeId = customer.MembershipTypeId;
-                customerInDb.IsSubscribedToNewsletter = customer.IsSubscribedToNewsletter;                
-            }
-
-            await _context.SaveChangesAsync();
-
-            return RedirectToAction("Index", "Customers");
         }
 
         public async Task<IActionResult> Edit(int id)
@@ -85,6 +69,38 @@ namespace Vidly.Controllers
             };
 
             return View("Form", formCustomer);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Save(Customer customer)
+        {
+            if(!ModelState.IsValid)
+            {
+                var membershipTypes = await _context.MembershipTypes.ToListAsync();
+                var customerFormViewModel = new CustomerFormViewModel
+                {
+                    Customer = customer,
+                    MembershipTypes = membershipTypes
+                };
+
+                return View("Form", customerFormViewModel);
+            }
+
+            if (customer.Id == 0)
+                await _context.Customers.AddAsync(customer);
+            else
+            {
+                var customerInDb = await _context.Customers.SingleAsync(c => c.Id == customer.Id);
+
+                customerInDb.Name = customer.Name;
+                customerInDb.Birthdate = customer.Birthdate;
+                customerInDb.MembershipTypeId = customer.MembershipTypeId;
+                customerInDb.IsSubscribedToNewsletter = customer.IsSubscribedToNewsletter;
+            }
+
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("Index", "Customers");
         }
     }
 }

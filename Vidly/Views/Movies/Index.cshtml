@@ -2,6 +2,8 @@
 
 <h1>Movies</h1>
 
+<a class="btn btn-primary" style="margin-bottom:20px" asp-controller="Movies" asp-action="Form">New movie</a>
+
 @if (Model == null || Model.Count == 0)
 {
     <p>We don't have any movies yet.</p>
@@ -18,16 +20,13 @@ else
         <tbody>
             @foreach (var movie in Model)
             {
-            <tr>
-                <td>
-                    <a asp-controller="Movies" 
-                       asp-action="Details"
-                       asp-route-id="@movie.Id">
-                    @movie.Name</a>
-                </td>
-                <td>@movie.Genre.Name</td>
-            </tr>                
-
+                <tr>
+                    <td>
+                        <a asp-controller="Movies" asp-action="Form" asp-route-id="@movie.Id">
+                        @movie.Name</a>
+                    </td>
+                    <td>@movie.Genre.Name</td>
+                </tr>
             }
         </tbody>
     </table>

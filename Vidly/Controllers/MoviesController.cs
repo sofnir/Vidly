@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Vidly.Data;
@@ -44,7 +43,7 @@ namespace Vidly.Controllers
         public async Task<IActionResult> Form(int id)
         {
             var genres = await _context.Genres.ToListAsync();
-            var movieFormViewModel = new MovieFormViewModel { Genres = genres };
+            var movieFormViewModel = new MovieFormViewModel();
 
             if (id != 0)
             {
@@ -53,15 +52,29 @@ namespace Vidly.Controllers
                 if (movie == null)
                     return NotFound();
 
-                movieFormViewModel.Movie = movie;
-            }
+                movieFormViewModel = new MovieFormViewModel(movie);                
+            }            
+
+            movieFormViewModel.Genres = genres;
 
             return View(movieFormViewModel);
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Save(Movie movie)
         {
+            if (!ModelState.IsValid)
+            {
+                var genres = await _context.Genres.ToListAsync();
+                var movieFormViewModel = new MovieFormViewModel(movie)
+                {
+                    Genres = genres
+                };
+
+                return View("Form", movieFormViewModel);
+            }
+
             if (movie.Id == 0)
             {
                 movie.DateAdded = DateTime.Now;

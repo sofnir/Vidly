@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -6,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Vidly.Data;
+using Vidly.Dtos;
 using Vidly.Models;
 
 namespace Vidly.Controllers.Api
@@ -15,45 +17,54 @@ namespace Vidly.Controllers.Api
     public class CustomersController : ControllerBase
     {
         private readonly VidlyContext _context;
+        private readonly IMapper _mapper;
 
-        public CustomersController(VidlyContext context)
+        public CustomersController(VidlyContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
 
         [HttpGet]
-        public async Task<IEnumerable<Customer>> GetCustomers()
+        public async Task<IEnumerable<CustomerDto>> GetCustomers()
         {            
             var customers = await _context.Customers.ToListAsync();
-            return customers;
+            var customersDto = _mapper.Map<IEnumerable<CustomerDto>>(customers);
+            return customersDto;
         }
 
         [HttpGet("{id}")]
-        public async Task<Customer> GetCustomers(int id)
+        public async Task<CustomerDto> GetCustomers(int id)
         {
             var customer = await _context.Customers.SingleOrDefaultAsync(c => c.Id == id);
 
             if (customer == null)
                 NotFound();
 
-            return customer;
+            var customerDto = _mapper.Map<CustomerDto>(customer);
+
+            return customerDto;
         }
 
         [HttpPost]
-        public async Task<Customer> CreateCustomer(Customer customer)
-        {
+        public async Task<CustomerDto> CreateCustomer(CustomerDto customerDto)
+        {            
+            var customer = _mapper.Map<Customer>(customerDto);
+
             if (!ModelState.IsValid)
                 BadRequest();
 
             await _context.Customers.AddAsync(customer);
             await _context.SaveChangesAsync();
 
-            return customer;
+            customerDto.Id = customer.Id;
+
+            return customerDto;
         }
 
         [HttpPut("{id}")]
-        public async Task UpdateCustomer(int id, Customer customer)
-        {
+        public async Task UpdateCustomer(int id, CustomerDto customerDto)
+        {            
             if (!ModelState.IsValid)
                 BadRequest();
 
@@ -62,10 +73,8 @@ namespace Vidly.Controllers.Api
             if (customerInDb == null)
                 NotFound();
 
-            customerInDb.Name = customer.Name;
-            customerInDb.IsSubscribedToNewsletter = customer.IsSubscribedToNewsletter;
-            customerInDb.Birthdate = customer.Birthdate;
-            customerInDb.MembershipTypeId = customer.MembershipTypeId;
+            _mapper.Map(customerDto, customerInDb);
+            customerInDb.Id = id;
 
             await _context.SaveChangesAsync();
         }

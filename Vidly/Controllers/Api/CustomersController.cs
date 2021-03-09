@@ -26,69 +26,75 @@ namespace Vidly.Controllers.Api
         }
 
         [HttpGet]
-        public async Task<IEnumerable<CustomerDto>> GetCustomers()
+        public async Task<ActionResult<IEnumerable<CustomerDto>>> GetCustomers()
         {            
             var customers = await _context.Customers.ToListAsync();
-            var customersDto = _mapper.Map<IEnumerable<CustomerDto>>(customers);
-            return customersDto;
+            var customersDto = _mapper.Map<ActionResult<IEnumerable<CustomerDto>>>(customers);
+            return Ok(customersDto);
         }
 
         [HttpGet("{id}")]
-        public async Task<CustomerDto> GetCustomers(int id)
+        public async Task<ActionResult<CustomerDto>> GetCustomers(int id)
         {
             var customer = await _context.Customers.SingleOrDefaultAsync(c => c.Id == id);
 
             if (customer == null)
-                NotFound();
+                return NotFound();
 
             var customerDto = _mapper.Map<CustomerDto>(customer);
 
-            return customerDto;
+            return Ok(customerDto);
         }
 
         [HttpPost]
-        public async Task<CustomerDto> CreateCustomer(CustomerDto customerDto)
+        public async Task<ActionResult<CustomerDto>> CreateCustomer(CustomerDto customerDto)
         {            
             var customer = _mapper.Map<Customer>(customerDto);
 
             if (!ModelState.IsValid)
-                BadRequest();
+                return BadRequest();
 
             await _context.Customers.AddAsync(customer);
             await _context.SaveChangesAsync();
 
             customerDto.Id = customer.Id;
 
-            return customerDto;
+            return CreatedAtAction(nameof(GetCustomers), new { id = customerDto.Id }, customerDto);
         }
 
         [HttpPut("{id}")]
-        public async Task UpdateCustomer(int id, CustomerDto customerDto)
+        public async Task<IActionResult> UpdateCustomer(int id, CustomerDto customerDto)
         {            
             if (!ModelState.IsValid)
-                BadRequest();
+                return BadRequest();
 
             var customerInDb = await _context.Customers.SingleOrDefaultAsync(c => c.Id == id);
 
             if (customerInDb == null)
-                NotFound();
+                return NotFound();
 
             _mapper.Map(customerDto, customerInDb);
             customerInDb.Id = id;
 
             await _context.SaveChangesAsync();
+
+            return NoContent();
         }
 
         [HttpDelete("{id}")]
-        public async Task DeleteCustomer(int id)
+        public async Task<ActionResult<CustomerDto>> DeleteCustomer(int id)
         {            
             var customerInDb = await _context.Customers.SingleOrDefaultAsync(c => c.Id == id);
 
             if (customerInDb == null)
-                NotFound();
+                return NotFound();
 
             _context.Customers.Remove(customerInDb);
             await _context.SaveChangesAsync();
+
+            var customerDto = _mapper.Map<CustomerDto>(customerInDb);
+
+            return customerDto;
         }
     }
 }

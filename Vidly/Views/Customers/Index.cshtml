@@ -2,6 +2,8 @@
 
 <h1>Customers</h1>
 
+<a class="btn btn-primary" style="margin-bottom:20px" asp-controller="Customers" asp-action="Form">New customer</a>
+
 @if (Model == null || Model.Count == 0)
 {
     <p>We don't have any customers yet.</p>
@@ -23,7 +25,7 @@ else
                 <td><a asp-controller="Customers" asp-action="Edit" asp-route-id="@customer.Id">@customer.Name</a></td>
                 <td>@customer.MembershipType.Name</td>
                 <td>
-                    <button data-customer-id="@customer.Id" class="btn-link js-delete">Delete</button>
+                    <button data-customer-id="@customer.Id" class="btn btn-danger js-delete">Delete</button>
                 </td>
             </tr>
             }

@@ -16,7 +16,10 @@ namespace Vidly
             CreateMap<CustomerDto, Customer>();
 
             CreateMap<Movie, MovieDto>();
-            CreateMap<MovieDto, Movie>();            
+            CreateMap<MovieDto, Movie>();
+
+            CreateMap<MembershipType, MembershipTypeDto>();
+            CreateMap<MembershipTypeDto, MembershipType>();
         }
     }
 }

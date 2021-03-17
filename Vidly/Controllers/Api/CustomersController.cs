@@ -28,7 +28,7 @@ namespace Vidly.Controllers.Api
         [HttpGet]
         public async Task<ActionResult<IEnumerable<CustomerDto>>> GetCustomers()
         {            
-            var customers = await _context.Customers.ToListAsync();
+            var customers = await _context.Customers.Include(c => c.MembershipType).ToListAsync();
             var customersDto = _mapper.Map<IEnumerable<CustomerDto>>(customers);
             return Ok(customersDto);
         }

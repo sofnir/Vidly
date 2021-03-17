@@ -29,7 +29,7 @@ namespace Vidly.Controllers.Api
         public async Task<ActionResult<IEnumerable<CustomerDto>>> GetCustomers()
         {            
             var customers = await _context.Customers.ToListAsync();
-            var customersDto = _mapper.Map<ActionResult<IEnumerable<CustomerDto>>>(customers);
+            var customersDto = _mapper.Map<IEnumerable<CustomerDto>>(customers);
             return Ok(customersDto);
         }
 

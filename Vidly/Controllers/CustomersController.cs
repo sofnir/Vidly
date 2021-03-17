@@ -37,34 +37,24 @@ namespace Vidly.Controllers
             return View(customer);
         }
 
-        public async Task<IActionResult> Form()
+        public async Task<IActionResult> Form(int id)
         {            
             var membershipTypes = await _context.MembershipTypes.ToListAsync();
-            var newCustomer = new CustomerFormViewModel 
+            var customerFormViewModel = new CustomerFormViewModel();
+
+            if(id != 0)
             {
-                Customer = new Customer(),
-                MembershipTypes = membershipTypes
-            };
+                var customer = await _context.Customers.SingleOrDefaultAsync(c => c.Id == id);
 
-            return View(newCustomer);
-        }
+                if (customer == null)
+                    return NotFound();
 
-        public async Task<IActionResult> Edit(int id)
-        {
-            var customer = await _context.Customers.SingleOrDefaultAsync(c => c.Id == id);
+                customerFormViewModel = new CustomerFormViewModel(customer);
+            }
 
-            if (customer == null)
-                return NotFound();
+            customerFormViewModel.MembershipTypes = membershipTypes;            
 
-            var membershipTypes = await _context.MembershipTypes.ToListAsync();
-
-            var formCustomer = new CustomerFormViewModel()
-            {
-                Customer = customer,
-                MembershipTypes = membershipTypes
-            };
-
-            return View("Form", formCustomer);
+            return View(customerFormViewModel);
         }
 
         [HttpPost]
@@ -74,9 +64,8 @@ namespace Vidly.Controllers
             if(!ModelState.IsValid)
             {
                 var membershipTypes = await _context.MembershipTypes.ToListAsync();
-                var customerFormViewModel = new CustomerFormViewModel
-                {
-                    Customer = customer,
+                var customerFormViewModel = new CustomerFormViewModel(customer)
+                {                    
                     MembershipTypes = membershipTypes
                 };
 
@@ -84,7 +73,9 @@ namespace Vidly.Controllers
             }
 
             if (customer.Id == 0)
+            {
                 await _context.Customers.AddAsync(customer);
+            }                
             else
             {
                 var customerInDb = await _context.Customers.SingleAsync(c => c.Id == customer.Id);

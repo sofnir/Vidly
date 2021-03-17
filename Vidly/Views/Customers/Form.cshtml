@@ -1,30 +1,37 @@
 ﻿@model Vidly.ViewModels.CustomerFormViewModel
 
-<h2>New Customer</h2>
+@if (Model.Id == 0)
+{
+    <h2>New Customer</h2>
+}
+else
+{
+    <h2>Edit Customer</h2>
+}
 
 @using (@Html.BeginForm("Save", "Customers"))
 {
     <div class="form-group">
-        @Html.LabelFor(c => c.Customer.Name)
-        @Html.TextBoxFor(c => c.Customer.Name, new { @class = "form-control" })
-        @Html.ValidationMessageFor(c => c.Customer.Name)
+        @Html.LabelFor(c => c.Name)
+        @Html.TextBoxFor(c => c.Name, new { @class = "form-control" })
+        @Html.ValidationMessageFor(c => c.Name)
     </div>
     <div class="form-group">
-        @Html.LabelFor(c => c.Customer.MembershipTypeId)
-        @Html.DropDownListFor(c => c.Customer.MembershipTypeId, new SelectList(Model.MembershipTypes, "Id", "Name"), "Select Membership Type", new { @class = "form-control" })
-        @Html.ValidationMessageFor(c => c.Customer.MembershipTypeId)
+        @Html.LabelFor(c => c.MembershipTypeId)
+        @Html.DropDownListFor(c => c.MembershipTypeId, new SelectList(Model.MembershipTypes, "Id", "Name"), "Select Membership Type", new { @class = "form-control" })
+        @Html.ValidationMessageFor(c => c.MembershipTypeId)
     </div>
     <div class="form-group">
-        @Html.LabelFor(c => c.Customer.Birthdate)
-        @Html.TextBoxFor(c => c.Customer.Birthdate, "{0:d MMM yyyy}", new { @class = "form-control" })
-        @Html.ValidationMessageFor(c => c.Customer.Birthdate)
+        @Html.LabelFor(c => c.Birthdate)
+        @Html.TextBoxFor(c => c.Birthdate, "{0:d MMM yyyy}", new { @class = "form-control" })
+        @Html.ValidationMessageFor(c => c.Birthdate)
     </div>
     <div class="checkbox">
         <label>
-            @Html.CheckBoxFor(c => c.Customer.IsSubscribedToNewsletter) Subscribed to Newsletter?
+            @Html.CheckBoxFor(c => c.IsSubscribedToNewsletter) Subscribed to Newsletter?
         </label>
     </div>
-    @Html.HiddenFor(c => c.Customer.Id)
+    @Html.HiddenFor(c => c.Id)
     @Html.AntiForgeryToken()
     <button type="submit" class="btn btn-primary">Save</button>
 }

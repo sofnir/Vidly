@@ -11,15 +11,7 @@ namespace Vidly.Models
     {
         protected override ValidationResult IsValid(object value, ValidationContext validationContext)
         {
-            dynamic customer;
-            if(validationContext.ObjectInstance is Customer)
-            {
-                customer = validationContext.ObjectInstance as Customer;
-            }
-            else
-            {
-                customer = validationContext.ObjectInstance as CustomerDto;
-            }            
+            var customer = validationContext.ObjectInstance as Customer;
 
             if (customer.MembershipTypeId == MembershipType.Unknown ||
                 customer.MembershipTypeId == MembershipType.PayAsYouGo)

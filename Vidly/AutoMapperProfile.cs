@@ -20,6 +20,9 @@ namespace Vidly
 
             CreateMap<MembershipType, MembershipTypeDto>();
             CreateMap<MembershipTypeDto, MembershipType>();
+
+            CreateMap<Genre, GenreDto>();
+            CreateMap<GenreDto, Genre>();
         }
     }
 }

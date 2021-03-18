@@ -1,42 +1,39 @@
-﻿@model List<Movie>
-
-<h1>Movies</h1>
+﻿<h1>Movies</h1>
 
 <a class="btn btn-primary" style="margin-bottom:20px" asp-controller="Movies" asp-action="Form">New movie</a>
 
-@if (Model == null || Model.Count == 0)
-{
-    <p>We don't have any movies yet.</p>
-}
-else
-{
-    <table id="movies" class="table table-hover">
-        <thead>
-            <tr>
-                <th scope="col">Name</th>
-                <th scope="col">Genre</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var movie in Model)
-            {
-                <tr>
-                    <td>
-                        <a asp-controller="Movies" asp-action="Form" asp-route-id="@movie.Id">
-                        @movie.Name</a>
-                    </td>
-                    <td>@movie.Genre.Name</td>
-                </tr>
-            }
-        </tbody>
-    </table>
-}
+<table id="movies" class="table table-hover">
+    <thead>
+        <tr>
+            <th scope="col">Name</th>
+            <th scope="col">Genre</th>
+        </tr>
+    </thead>
+    <tbody>
+    </tbody>
+</table>
 
 @section scripts
 {
     <script>
         $(document).ready(function () {
-            $("#movies").DataTable();
+            $("#movies").DataTable({
+                ajax: {
+                    url: "api/movies",
+                    dataSrc: ""
+                },
+                columns: [
+                    {
+                        data: "name",
+                        render: function (data, type, movie) {
+                            return "<a href='movies/form/" + movie.id + "'>" + movie.name + "</a>";
+                        }
+                    },
+                    {
+                        data: "genre.name"
+                    }                    
+                ]
+            });
         });
     </script>
 }

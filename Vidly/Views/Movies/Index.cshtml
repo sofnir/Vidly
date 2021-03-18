@@ -10,7 +10,7 @@
 }
 else
 {
-    <table class="table table-hover">
+    <table id="movies" class="table table-hover">
         <thead>
             <tr>
                 <th scope="col">Name</th>
@@ -30,4 +30,13 @@ else
             }
         </tbody>
     </table>
+}
+
+@section scripts
+{
+    <script>
+        $(document).ready(function () {
+            $("#movies").DataTable();
+        });
+    </script>
 }

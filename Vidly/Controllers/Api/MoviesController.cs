@@ -84,12 +84,12 @@ namespace Vidly.Controllers.Api
         [HttpDelete("{id}")]
         public async Task<ActionResult<MovieDto>> DeleteMovie(int id)
         {
-            var movieInDb = await _context.Customers.SingleOrDefaultAsync(m => m.Id == id);
+            var movieInDb = await _context.Movies.SingleOrDefaultAsync(m => m.Id == id);
 
             if (movieInDb == null)
                 return NotFound();
 
-            _context.Customers.Remove(movieInDb);
+            _context.Movies.Remove(movieInDb);
             await _context.SaveChangesAsync();
 
             var movieDto = _mapper.Map<MovieDto>(movieInDb);

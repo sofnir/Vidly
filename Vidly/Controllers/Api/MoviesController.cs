@@ -26,9 +26,17 @@ namespace Vidly.Controllers.Api
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<CustomerDto>>> GetMovies()
+        public async Task<ActionResult<IEnumerable<CustomerDto>>> GetMovies(string query = null)
         {
-            var movies = await _context.Movies.Include(m => m.Genre).ToListAsync();
+            var moviesQuery = _context.Movies
+                .Include(m => m.Genre)
+                .Where(m => m.NumberAvailable > 0);
+
+            if (!String.IsNullOrWhiteSpace(query))
+                moviesQuery = moviesQuery.Where(m => m.Name.Contains(query));
+
+            var movies = await moviesQuery.ToListAsync();
+
             var moviesDto = _mapper.Map<IEnumerable<MovieDto>>(movies);
             return Ok(moviesDto);
         }

@@ -1,4 +1,4 @@
-﻿<form>
+﻿<form id="newRental">
     <div class="form-group">
         <label>Customer</label>
         <div class="tt-container">
@@ -69,7 +69,7 @@
             }).on("typeahead:select", function (e, movie) {
                 $("#movies").append("<li class='list-group-item'>" + movie.name + "</li>");
                 $("#movie").typeahead("val", "");
-                bm.movieIds.push(movie.id);
+                vm.movieIds.push(movie.id);
             });
 
             var customers = new Bloodhound({
@@ -79,6 +79,28 @@
                     url: '/api/customers?query=%QUERY',
                     wildcard: '%QUERY'
                 }
+            });
+            
+            $('#newRental').submit(function (e) {
+                e.preventDefault();
+
+                vm = {
+                    customerId: 1,
+                    movieIds: [1, 4, 3]
+                }
+
+                $.ajax({
+                    contentType: 'application/json; charset=UTF-8',
+                    url: "/api/rentals",
+                    method: "post",
+                    data: JSON.stringify()
+                })
+                .done(function () {
+                    console.log("done");
+                })
+                .fail(function () {
+                    console.log("fail");
+                })
             });
         })
     </script>

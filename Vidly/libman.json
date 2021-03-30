@@ -16,6 +16,10 @@
       "files": [
         "typeahead.bundle.min.js"
       ]
+    },
+    {
+      "library": "toastr.js@2.1.4",
+      "destination": "wwwroot/toastr.js/"
     }
   ]
 }

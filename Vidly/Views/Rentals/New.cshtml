@@ -84,11 +84,6 @@
             $('#newRental').submit(function (e) {
                 e.preventDefault();
 
-                vm = {
-                    customerId: 1,
-                    movieIds: [1, 4, 3]
-                }
-
                 $.ajax({
                     contentType: 'application/json; charset=UTF-8',
                     url: "/api/rentals",
